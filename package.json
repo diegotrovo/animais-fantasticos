@@ -1,7 +1,7 @@
 {
   "name": "animais-fantasticos",
   "version": "1.0.0",
-  "description": "Primeiro projeto de Javascript",
+  "description": "Projeto final do curso de Javascript completo",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
