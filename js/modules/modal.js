@@ -1,33 +1,55 @@
-export default function initModal() {
-  const botaoAbrir = document.querySelector('[data-modal="abrir"');
-  const botaoFechar = document.querySelector('[data-modal="fechar"');
-  const containerModal = document.querySelector('[data-modal="container"');
+export default class Modal {
+  constructor(botaoAbrir, botaoFechar, containerModal, botaoMenuMobile, menuListMobile) {
+    this.botaoAbrir = document.querySelector(botaoAbrir);
+    this.botaoFechar = document.querySelector(botaoFechar);
+    this.containerModal = document.querySelector(containerModal);
 
-  const botaoMenuMobile = document.querySelector('[data-menu="button"]');
-  const menuList = document.querySelector('[data-menu="list"]');
+    this.botaoMenuMobile = document.querySelector(botaoMenuMobile);
+    this.menuListMobile = document.querySelector(menuListMobile);
 
-  function toggleModal(event) {
+    this.classAtivo = "active";
+
+    // bind this ao callback para fazer referencia ao objeto da classe
+    this.handleToggleModal = this.handleToggleModal.bind(this);
+    this.cliqueForaModal = this.cliqueForaModal.bind(this);
+  }
+
+  handleToggleModal(event) {
     event.preventDefault();
-    containerModal.classList.toggle("ativo");
+    this.toggleModal();
+  }
 
-    // se Mobile > fecha MenuMobile ao abrir o modal
-    if (botaoMenuMobile && menuList) {
-      if (menuList.classList.contains("active")) {
-        botaoMenuMobile.classList.toggle("active");
-        menuList.classList.toggle("active");
+  toggleModal() {
+    this.containerModal.classList.toggle("ativo");
+
+    // Fechar MenuMobile ao abrir o modal
+    if (this.botaoMenuMobile && this.menuListMobile) {
+      if (this.menuListMobile.classList.contains(this.classAtivo)) {
+        this.botaoMenuMobile.classList.toggle(this.classAtivo);
+        this.menuListMobile.classList.toggle(this.classAtivo);
       }
     }
   }
 
-  function cliqueForaModal(event) {
-    if (event.target === this) {
-      toggleModal(event);
+  cliqueForaModal(event) {
+    if (event.target === this.containerModal) {
+      this.toggleModal(event);
     }
   }
 
-  if (botaoAbrir && botaoFechar && containerModal) {
-    botaoAbrir.addEventListener("click", toggleModal);
-    botaoFechar.addEventListener("click", toggleModal);
-    containerModal.addEventListener("click", cliqueForaModal);
+  addEventListener() {
+    if (this.botaoAbrir && this.botaoFechar && this.containerModal) {
+      this.botaoAbrir.addEventListener("click", this.handleToggleModal);
+      this.botaoFechar.addEventListener("click", this.handleToggleModal);
+      this.containerModal.addEventListener("click", this.cliqueForaModal);
+    }
+  }
+
+  init() {
+    if (this.botaoAbrir && this.botaoFechar && this.containerModal) {
+      this.addEventListener();
+    }
+
+    return this;
   }
 }
